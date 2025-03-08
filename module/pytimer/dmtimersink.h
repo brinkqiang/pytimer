@@ -64,6 +64,12 @@ public:
     }
 	virtual void OnTimer(uint64_t qwIDEvent, pybind11::function f)
 	{
+        if (0 == qwIDEvent)
+        {
+            f();
+            return;
+        }
+
 		f(qwIDEvent);
 	}
 };
