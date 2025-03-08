@@ -20,7 +20,7 @@ message(STATUS "VERSION: ${DMCONFIG_VERSION}")
 SET(PYTHON_VERSION 3.10)
 # On Windows, find_package is searched in sequence according to the PATH path. You can prefix 3.10
 # pybind11 2.9.1 requires Python 3.10
-find_package(Python ${PYTHON_VERSION} EXACT REQUIRED COMPONENTS Interpreter Development NumPy)
+find_package(Python ${PYTHON_VERSION} EXACT REQUIRED)
 
 if (NOT Python_FOUND)
     message(FATAL_ERROR "Python ${PYTHON_VERSION} not found! Please make sure Python is installed and available.")
