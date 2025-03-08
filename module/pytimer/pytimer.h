@@ -55,6 +55,6 @@ private:
 // export_begin
 static void stop() { CPyTimer::stop(); }
 static void    run() { CPyTimer::run(); }
-static int     poll(){ CPyTimer::poll(); }
+static int     poll(){ return CPyTimer::poll(); }
 // export_end
 #endif // __LUATIMER_H__
