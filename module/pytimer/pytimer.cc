@@ -21,9 +21,10 @@
 
 #include "pytimer.h"
 #include <iostream>
+#include <atomic>
 #include "dmutil.h"
 
-std::atomic_bool CPyTimer::m_bStop = false;
+std::atomic_bool CPyTimer::m_bStop{false};
 
 CPyTimer::CPyTimer()
 {
