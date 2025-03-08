@@ -8,19 +8,7 @@
 #include "pytimer.pybind11.h"
 
 
-#include "object.h"
-
-#include "creature.h"
-
-#include "player.h"
-
-#include "common/types.h"
-
-#include "common/enum.h"
-
-#include "common/macros.h"
-
-#include "common/struct.h"
+#include "pytimer.h"
 
 
 #include <pybind11/pybind11.h>
@@ -28,46 +16,15 @@
 #include <algorithm>
 
 PYBIND11_MODULE(pytimer, m) {
-    pybind11::class_<CObject>(m, "CObject")
-    .def(pybind11::init<>())
-    .def("GetObjID", &CObject::GetObjID, pybind11::return_value_policy::automatic_reference)
-    .def("SetObjID", &CObject::SetObjID, pybind11::return_value_policy::automatic_reference);
 
-    pybind11::class_<CCreature, CObject>(m, "CCreature")
-    .def(pybind11::init<>())
-    .def("GetHP", &CCreature::GetHP, pybind11::return_value_policy::automatic_reference)
-    .def("SetHP", &CCreature::SetHP, pybind11::return_value_policy::automatic_reference)
-    .def("AddHP", &CCreature::AddHP, pybind11::return_value_policy::automatic_reference)
-    .def("GetMP", &CCreature::GetMP, pybind11::return_value_policy::automatic_reference)
-    .def("SetMP", &CCreature::SetMP, pybind11::return_value_policy::automatic_reference)
-    .def("AddMP", &CCreature::AddMP, pybind11::return_value_policy::automatic_reference);
+    pybind11::class_<CPytimer, CDMTimerNode>(m, "CPytimer")
+    .def("settimer", &CPytimer::settimer, pybind11::return_value_policy::automatic_reference)
+    .def("killtimer", &CPytimer::killtimer, pybind11::return_value_policy::automatic_reference)
+    .def("killall", &CPytimer::killall, pybind11::return_value_policy::automatic_reference)
+    .def("sleepms", &CPytimer::sleepms, pybind11::return_value_policy::automatic_reference)
+    .def("stop", &CPytimer::stop, pybind11::return_value_policy::automatic_reference)
+    .def("run", &CPytimer::run, pybind11::return_value_policy::automatic_reference)
+    .def("poll", &CPytimer::poll, pybind11::return_value_policy::automatic_reference)
+    .def("gettime", &CPytimer::gettime, pybind11::return_value_policy::automatic_reference);
 
-    m.def("GNextID", &GNextID, pybind11::return_value_policy::automatic_reference);
-    pybind11::class_<CPlayer, CCreature, CObject>(m, "CPlayer")
-    .def(pybind11::init<>())
-    .def(pybind11::init<int,const std::string&>())
-    .def(pybind11::init<const std::string&>())
-    .def("Init", &CPlayer::Init, pybind11::return_value_policy::automatic_reference)
-    .def("OnChange", &CPlayer::OnChange, pybind11::return_value_policy::automatic_reference)
-    .def("NotChange", &CPlayer::NotChange, pybind11::return_value_policy::automatic_reference)
-    .def("SystemChange", &CPlayer::SystemChange, pybind11::return_value_policy::automatic_reference)
-    .def("LoadFromDB", &CPlayer::LoadFromDB, pybind11::return_value_policy::automatic_reference)
-    .def("SaveDB", &CPlayer::SaveDB, pybind11::return_value_policy::automatic_reference)
-    .def("GetLevel", &CPlayer::GetLevel, pybind11::return_value_policy::automatic_reference)
-    .def("GetName", &CPlayer::GetName, pybind11::return_value_policy::automatic_reference);
-
-    pybind11::class_<STaskInfo>(m, "STaskInfo")
-    .def(pybind11::init<>())
-    .def_readwrite("nTaskID", &STaskInfo::nTaskID)
-    .def_readwrite("nTaskState", &STaskInfo::nTaskState)
-    .def_readwrite("nTaskCondition", &STaskInfo::nTaskCondition);
-
-    pybind11::class_<SPos>(m, "SPos")
-    .def(pybind11::init<>())
-    .def(pybind11::init<int,int,int>())
-    .def_readwrite("x", &SPos::x)
-    .def_readwrite("y", &SPos::y)
-    .def_readwrite("z", &SPos::z);
 }
-
-
