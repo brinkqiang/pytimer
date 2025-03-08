@@ -47,7 +47,7 @@ ModuleImport("dmtest" "thirdparty/dmtest")
 
 PyModuleImport("module" "dmtest;pybind11::module;${PYTHON_LIBRARIES}")
 
-ExeImport("test" "dmtest;pytimer;pybind11::module;${PYTHON_LIBRARIES}")
+ExeImport("test" "dmtest;pytimer;pybind11::embed;${PYTHON_LIBRARIES}")
 
 add_custom_command(
     TARGET pytimer
