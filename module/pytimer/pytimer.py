@@ -8,7 +8,7 @@ def main_idle(id):
 
 timer.settimer(1, 1000, main_idle)
 
-print(pytimer.gettime())
+print(f"{pytimer.gettime()} sleepms start")
 
 # 嵌套回调实现
 # warning: sleepms bind IDEvent=0

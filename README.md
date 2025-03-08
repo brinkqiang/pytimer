@@ -57,7 +57,7 @@ def main_idle(id):
 
 timer.settimer(1, 1000, main_idle)
 
-print(pytimer.gettime())
+print(f"{pytimer.gettime()} sleepms start")
 
 # 嵌套回调实现
 # warning: sleepms bind IDEvent=0
@@ -79,6 +79,45 @@ timer.sleepms(2000, lambda : (
 ))
 
 pytimer.run()
+```
+
+- gtest output
+```
+Running main() from gtest_main.cc
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from TimerTest
+[ RUN      ] TimerTest.BasicTimerOperation
+2025-03-08 14:22:38 sleepms start
+2025-03-08 14:22:39 [1] hello main_idle
+2025-03-08 14:22:40 [0] sleepms 2000
+2025-03-08 14:22:40 [1] hello main_idle
+2025-03-08 14:22:41 [1] hello main_idle
+2025-03-08 14:22:41 [2] hello world 1
+2025-03-08 14:22:42 [1] hello main_idle
+2025-03-08 14:22:42 [2] hello world 2
+2025-03-08 14:22:43 [1] hello main_idle
+2025-03-08 14:22:43 [2] hello world 3
+2025-03-08 14:22:44 [1] hello main_idle
+2025-03-08 14:22:44 [2] hello world 4
+2025-03-08 14:22:45 [1] hello main_idle
+2025-03-08 14:22:45 [2] hello world 5
+2025-03-08 14:22:46 [1] hello main_idle
+2025-03-08 14:22:46 [2] hello world 6
+2025-03-08 14:22:47 [1] hello main_idle
+2025-03-08 14:22:47 [2] hello world 7
+2025-03-08 14:22:48 [1] hello main_idle
+2025-03-08 14:22:48 [2] hello world 8
+2025-03-08 14:22:49 [1] hello main_idle
+2025-03-08 14:22:49 [2] hello world 9
+2025-03-08 14:22:50 [1] hello main_idle
+2025-03-08 14:22:50 [2] hello world 10
+[       OK ] TimerTest.BasicTimerOperation (12060 ms)
+[----------] 1 test from TimerTest (12061 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran. (12062 ms total)
+[  PASSED  ] 1 test.
 ```
 
 ## 贡献指南

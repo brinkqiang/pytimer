@@ -1,61 +1,56 @@
-#include "gtest.h"
-#include <pybind11/pybind11.h>
+﻿#include "gtest.h"
 #include <pybind11/embed.h>
-#include <algorithm>
+#include <pybind11/pybind11.h>
 #include "dmformat.h"
 
+namespace py = pybind11;
+using namespace py::literals;
 
-class frame_dmpytest : public testing::Test
-{
-public:
-    virtual void SetUp()
-    {
-        pytimer = pybind11::module_::import("pytimer");
-        obj = pytimer.attr("CPlayer")(1, "zhangsan");
-    }
-    virtual void TearDown()
-    {
-
-    }
+class TimerTest : public testing::Test {
 protected:
-    pybind11::scoped_interpreter guard;
-    pybind11::module_ pytimer;
-    pybind11::object obj;
+    py::scoped_interpreter guard{}; // 启动解释器
+    py::module_ pytimer;
+    py::object timer;
 
-    const int PERF_COUNT = (100 * 10000);
+    void SetUp() override {
+        pytimer = py::module_::import("pytimer");
+        timer = pytimer.attr("CPyTimer")(); // 创建定时器实例
+    }
 };
 
+TEST_F(TimerTest, BasicTimerOperation) {
 
-TEST_F(frame_dmpytest, dmpytest_pytimer)
-{
-    auto GetName = obj.attr("GetName");
-    auto GetLevel = obj.attr("GetLevel");
-    auto GetHP = obj.attr("GetHP");
+    py::exec(R"(
+        # -*- coding: utf-8 -*-
+        import pytimer
 
-    obj.attr("Init")();
-    fmt::print("Name={} Level={} HP={}\n", GetName().cast<std::string>(), GetLevel().cast<int>(), GetHP().cast<int64_t>());
-    obj.attr("AddHP")(100);
-    fmt::print("Name={} Level={} HP={}\n", GetName().cast<std::string>(), GetLevel().cast<int>(), GetHP().cast<int64_t>());
-}
+        timer = pytimer.CPyTimer()
 
-PYBIND11_EMBEDDED_MODULE(dmpymath, m) {
-    // `m` is a `py::module_` which is used to bind functions and classes
-    m.def("add", [](int a, int b) {
-        return a + b;
-        });
-}
+        def main_idle(id):
+            print(f"{pytimer.gettime()} [{id}] hello main_idle")
 
-TEST_F(frame_dmpytest, dmpytest_perf)
-{
-    auto dmpymath = pybind11::module_::import("dmpymath");
-    auto add = dmpymath.attr("add");
+        timer.settimer(1, 1000, main_idle)
 
-    uint64_t total = 0;
-    for (int i = 0; i < PERF_COUNT; i++)
-    {
-        int num = add(1, 2).cast<int>();
-        total += num;
-    }
+        print(f"{pytimer.gettime()} sleepms start")
 
-    fmt::print("count={} total={}\n", PERF_COUNT, total);
+        # warning: sleepms bind IDEvent=0
+        timer.sleepms(2000, lambda : (
+            (lambda count=[0]: (
+                print(f"{pytimer.gettime()} [0] sleepms 2000"),
+                timer.settimer(2, 1000, lambda id: (
+                    (lambda count=count: (
+                        count.__setitem__(0, count[0] + 1),
+                        print(f"{pytimer.gettime()} [{id}] hello world {count[0]}"),
+                        count[0] >= 10 and (
+                            timer.killtimer(id),
+                            timer.killall(),
+                            pytimer.stop()
+                        )
+                    ))()
+                ))
+            ))()
+        ))
+
+        pytimer.run()
+    )");
 }
