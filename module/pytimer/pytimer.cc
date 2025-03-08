@@ -23,45 +23,45 @@
 #include <iostream>
 #include "dmutil.h"
 
-std::atomic_bool CPytimer::m_bStop = false;
+std::atomic_bool CPyTimer::m_bStop = false;
 
-CPytimer::CPytimer()
+CPyTimer::CPyTimer()
 {
 
 }
 
-void CPytimer::settimer(uint64_t qwIDEvent,  uint64_t qwElapse,
+void CPyTimer::settimer(uint64_t qwIDEvent,  uint64_t qwElapse,
                          pybind11::function f)
 {
     SetPyTimer(qwIDEvent, qwElapse, f);
 }
 
-void CPytimer::killtimer(uint64_t qwIDEvent)
+void CPyTimer::killtimer(uint64_t qwIDEvent)
 {
     KillTimer(qwIDEvent);
 }
 
-void CPytimer::killall()
+void CPyTimer::killall()
 {
     KillTimer();
 }
 
-void CPytimer::sleepms(uint64_t qwElapse, pybind11::function f)
+void CPyTimer::sleepms(uint64_t qwElapse, pybind11::function f)
 {
     SetPyTimer(0, qwElapse, f, true);
 }
 
-std::string CPytimer::gettime()
+std::string CPyTimer::gettime()
 {
     return DMFormatDateTime();
 }
 
-void CPytimer::stop()
+void CPyTimer::stop()
 {
     m_bStop = true;
 }
 
-void CPytimer::run()
+void CPyTimer::run()
 {
     int nEvent = 0;
     bool bBusy = false;
@@ -84,7 +84,7 @@ void CPytimer::run()
     CDMTimerModule::Instance()->Run();
 }
 
-int CPytimer::poll()
+int CPyTimer::poll()
 {
     return CDMTimerModule::Instance()->Run();
 }

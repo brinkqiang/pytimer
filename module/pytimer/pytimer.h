@@ -28,11 +28,11 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-class CPytimer : public CDMTimerNode
+class CPyTimer : public CDMTimerNode
 {
 public:
-    CPytimer();
-    virtual ~CPytimer() {}
+    CPyTimer();
+    virtual ~CPyTimer() {}
 // export_begin
     void    settimer(uint64_t qwIDEvent,  uint64_t qwElapse, pybind11::function f);
     void    killtimer(uint64_t qwIDEvent);
@@ -40,17 +40,21 @@ public:
 
     // sleepms bind IDEvent=0
     void    sleepms(uint64_t qwElapse,  pybind11::function f);
-
+// export_end
     static void    stop();
 
     static void    run();
     static int     poll();
 
     static std::string gettime();
-// export_end
+
 private:
 
     static std::atomic_bool m_bStop;
 };
-
+// export_begin
+static void stop() { CPyTimer::stop(); }
+static void    run() { CPyTimer::run(); }
+static int     poll(){ CPyTimer::poll(); }
+// export_end
 #endif // __LUATIMER_H__

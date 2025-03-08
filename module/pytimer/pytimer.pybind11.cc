@@ -17,14 +17,13 @@
 
 PYBIND11_MODULE(pytimer, m) {
 
-    pybind11::class_<CPytimer, CDMTimerNode>(m, "CPytimer")
-    .def("settimer", &CPytimer::settimer, pybind11::return_value_policy::automatic_reference)
-    .def("killtimer", &CPytimer::killtimer, pybind11::return_value_policy::automatic_reference)
-    .def("killall", &CPytimer::killall, pybind11::return_value_policy::automatic_reference)
-    .def("sleepms", &CPytimer::sleepms, pybind11::return_value_policy::automatic_reference)
-    .def("stop", &CPytimer::stop, pybind11::return_value_policy::automatic_reference)
-    .def("run", &CPytimer::run, pybind11::return_value_policy::automatic_reference)
-    .def("poll", &CPytimer::poll, pybind11::return_value_policy::automatic_reference)
-    .def("gettime", &CPytimer::gettime, pybind11::return_value_policy::automatic_reference);
+    m.def("stop", &stop, pybind11::return_value_policy::automatic_reference);
+    m.def("run", &run, pybind11::return_value_policy::automatic_reference);
+    m.def("poll", &poll, pybind11::return_value_policy::automatic_reference);
+    pybind11::class_<CPyTimer, CDMTimerNode>(m, "CPyTimer")
+    .def("settimer", &CPyTimer::settimer, pybind11::return_value_policy::automatic_reference)
+    .def("killtimer", &CPyTimer::killtimer, pybind11::return_value_policy::automatic_reference)
+    .def("killall", &CPyTimer::killall, pybind11::return_value_policy::automatic_reference)
+    .def("sleepms", &CPyTimer::sleepms, pybind11::return_value_policy::automatic_reference);
 
 }
