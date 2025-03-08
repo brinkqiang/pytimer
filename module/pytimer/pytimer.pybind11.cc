@@ -8,6 +8,10 @@
 #include "pytimer.pybind11.h"
 
 
+#include "dmtimersink.h"
+
+#include "dmtimernode.h"
+
 #include "pytimer.h"
 
 
@@ -17,10 +21,18 @@
 
 PYBIND11_MODULE(pytimer, m) {
 
+    pybind11::class_<ITimerSink>(m, "ITimerSink");
+
+    pybind11::class_<CDMTimerElement>(m, "CDMTimerElement");
+
+    pybind11::class_<CDMTimerNode, ITimerSink>(m, "CDMTimerNode");
+
     m.def("stop", &stop, pybind11::return_value_policy::automatic_reference);
     m.def("run", &run, pybind11::return_value_policy::automatic_reference);
     m.def("poll", &poll, pybind11::return_value_policy::automatic_reference);
-    pybind11::class_<CPyTimer, CDMTimerNode>(m, "CPyTimer")
+    m.def("gettime", &gettime, pybind11::return_value_policy::automatic_reference);
+    pybind11::class_<CPyTimer, CDMTimerNode, ITimerSink>(m, "CPyTimer")
+    .def(pybind11::init<>())
     .def("settimer", &CPyTimer::settimer, pybind11::return_value_policy::automatic_reference)
     .def("killtimer", &CPyTimer::killtimer, pybind11::return_value_policy::automatic_reference)
     .def("killall", &CPyTimer::killall, pybind11::return_value_policy::automatic_reference)

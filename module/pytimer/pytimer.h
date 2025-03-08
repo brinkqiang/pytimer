@@ -31,9 +31,10 @@
 class CPyTimer : public CDMTimerNode
 {
 public:
+// export_begin
     CPyTimer();
     virtual ~CPyTimer() {}
-// export_begin
+
     void    settimer(uint64_t qwIDEvent,  uint64_t qwElapse, pybind11::function f);
     void    killtimer(uint64_t qwIDEvent);
     void    killall();
@@ -56,5 +57,7 @@ private:
 static void stop() { CPyTimer::stop(); }
 static void    run() { CPyTimer::run(); }
 static int     poll(){ return CPyTimer::poll(); }
+static std::string gettime() { return CPyTimer::gettime(); }
+
 // export_end
 #endif // __LUATIMER_H__

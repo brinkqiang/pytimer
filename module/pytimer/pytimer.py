@@ -3,31 +3,31 @@ import pytimer
 
 timer = pytimer.CPyTimer()
 
+def main_idle(id):
+    print("hello main_idle: " + str(id))
 
-def main_idle():
-    print("hello main_idle")
+timer.settimer(1, 1000, main_idle)
 
+print(pytimer.gettime())
 
-timer.settimer(1, 1000, lambda id: 
-    timer.killtimer(id)
-    main_idle()
-)
+# 使用可变对象解决作用域问题
+count_container = [0]
 
-print(module.gettime())
-
-# warning: sleepms bind IDEvent=0
-timer.sleepms(2000, lambda: 
-    print("sleepms 2000 " + str(module.gettime()))
-
-    count = 0
-    timer.settimer(2, 1000, lambda id: 
-        count += 1
-        print("hello world " + str(count))
-        if count >= 10:
+def sleep_callback(id):
+    print("sleepms 2000 " + str(pytimer.gettime()))
+    
+    def timer_callback(id):
+        count_container[0] += 1
+        print("hello world " + str(count_container[0]))
+        if count_container[0] >= 10:
             timer.killtimer(id)
             timer.killall()
-            module.stop()
-    )
-)
+            pytimer.stop()
+    
+    # 启动第二个定时器
+    timer.settimer(2, 1000, timer_callback)
 
-module.run();
+# 修正 sleepms 调用
+timer.sleepms(2000, sleep_callback)
+
+pytimer.run()
