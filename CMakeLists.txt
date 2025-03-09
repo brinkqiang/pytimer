@@ -17,7 +17,7 @@ set(DMCONFIG_VERSION "${DMCONFIG_VERSION_MAJOR}.${DMCONFIG_VERSION_MINOR}.${DMCO
 message(STATUS "VERSION: ${DMCONFIG_VERSION}")
 
 # python bitset.h dmflex.common bitset.h
-SET(PYTHON_VERSION 3.10)
+set(PYTHON_VERSION 3.10)
 # On Windows, find_package is searched in sequence according to the PATH path. You can prefix 3.10
 # pybind11 2.9.1 requires Python 3.10
 find_package(Python ${PYTHON_VERSION} EXACT REQUIRED COMPONENTS Interpreter Development)
@@ -32,8 +32,8 @@ else()
     message(STATUS "Python version set to: ${PYBIND11_PYTHON_VERSION}")
 
     include_directories(${PYTHON_INCLUDE_DIRS})
-    LINK_DIRECTORIES(${Python_LIBRARY_DIRS})
-    SET(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION})
+    link_directories(${Python_LIBRARY_DIRS})
+    set(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION})
     mark_as_advanced(PYBIND11_PYTHON_VERSION)
     # static lib
     #add_compile_definitions(Py_NO_ENABLE_SHARED Py_STATIC)
