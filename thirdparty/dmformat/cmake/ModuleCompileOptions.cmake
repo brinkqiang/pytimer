@@ -30,6 +30,15 @@ macro(ShowEnvironment)
   message(STATUS "================================================================================")
 endmacro(ShowEnvironment)
 
+function(print_package_vars PREFIX)
+    get_cmake_property(_vars VARIABLES)
+    foreach(_var IN LISTS _vars)
+        if(_var MATCHES "^${PREFIX}")
+            message(STATUS "package ${PREFIX} -> ${_var} = ${${_var}}")
+        endif()
+    endforeach()
+endfunction()
+
 macro(ModuleSetCompileOptions)
   cmake_policy(SET CMP0022 NEW)
   include(CheckCXXCompilerFlag)
@@ -78,13 +87,13 @@ macro(ModuleSetCompileOptions)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL}")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-
+      
+    link_libraries(Ws2_32)
     if(MSVC)
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
       set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
       set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
-      
-      link_libraries(Ws2_32)
+
       add_definitions(/bigobj)
       add_definitions(/DNOMINMAX /DWIN32_LEAN_AND_MEAN=1 /D_CRT_SECURE_NO_WARNINGS /D_SCL_SECURE_NO_WARNINGS /D_WINSOCK_DEPRECATED_NO_WARNINGS)
       add_definitions(/utf-8)
