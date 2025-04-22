@@ -1,0 +1,63 @@
+
+// Copyright (c) 2018 brinkqiang (brink.qiang@gmail.com)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#ifndef __LUATIMER_H__
+#define __LUATIMER_H__
+
+#include <string>
+#include <atomic>
+#include "dmtimermodule.h"
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
+
+class CPyTimer : public CDMTimerNode
+{
+public:
+// export_begin
+    CPyTimer();
+    virtual ~CPyTimer() {}
+
+    void    settimer(uint64_t qwIDEvent,  uint64_t qwElapse, pybind11::function f);
+    void    killtimer(uint64_t qwIDEvent);
+    void    killall();
+
+    // sleepms bind IDEvent=0
+    void    sleepms(uint64_t qwElapse,  pybind11::function f);
+// export_end
+    static void    stop();
+
+    static void    run();
+    static int     poll();
+
+    static std::string gettime();
+
+private:
+
+    static std::atomic_bool m_bStop;
+};
+// export_begin
+static void stop() { CPyTimer::stop(); }
+static void    run() { CPyTimer::run(); }
+static int     poll(){ return CPyTimer::poll(); }
+static std::string gettime() { return CPyTimer::gettime(); }
+
+// export_end
+#endif // __LUATIMER_H__
